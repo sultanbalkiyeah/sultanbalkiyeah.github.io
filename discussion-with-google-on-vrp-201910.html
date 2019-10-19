@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+    
+    <meta http-equiv="Content-Language" content="en-us">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lol --</title>
+    <link href="https://github.com/sultanbalkiyeah/sultanbalkiyeah.github.io/raw/master/asdh.jpg" rel="shortcut icon" type="image/x-icon">
+    <link rel="stylesheet" href="https://sultanbalkiyeah.github.io/hush.css">
+  </head>
+  <body dir="">
+    <div class="jandapage-topbar">
+      <div class="jandapage-global-nav">
+        <div class="jandapage-global-nav-inner">
+          <div class="jandapage-container">
+            <ul class="jandapage-nav">
+              <li>
+                
+            <div class="jandapage-pull-right">
+              <ul class="jandapage-nav">
+                <li><a href="https://twitter.com/SultanMoeslim" id="">noxss()</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="jandapage-body-content">
+
+        <center><h3> Google Bugbounty - ( Remote code execution / Local file disclosure on cloudshell Alpha )</h3></center>
+      <center><img src="https://sultanbalkiyeah.github.io/asdh.jpg" alt="cavalo fantasma" width="500" height="300">
+<div><div class="%"><p><code>I found a leaked access_token on CloudShell.
+</code><br>
+I think this is right when the user adds another user, who does not have more access.<br>
+such as adding a password in the "postgres" username to access postgresql etc.
+<br>an attacker who has access to the postgres username<br> can see acces_token belongs root user.</p><div> <p>
+  apparently, <code>username : postgres (Postgresql 9.6)</code> is the default <code>cloud shell.</code><br>
+and apparently, surprisingly.
+default password in <code>SQL INSTANCES PAGE<br></code>
+This <code>Google CLOUD</code> can be used to log into the <code>victim cloud shell.</code><br>
+please take the time, to read my discussion with <code>Google.</code><br>
+and the value / comment on my Twitter.<br>
+who knows your experience increases,after reading the discussion below..<br> so that you will wise in reporting on bug on bugbounty.</code></p>
+<code>
+<div class="s"><pre class="s"><code><span class="err">1. <span class="n">Attacker Login to cloudshell with the username like postgres and password on Your IP (devshell-prod)
+2. Attacker execute in command: <code><font size="4" color="yellow">curl 127.0.0.1/0.1/meta-data/service-accounts/default/token</font></code>
+3. Attacker can found a root access_token!
+Bearer : e29...#Redacted#
+<span class="s2">
+</code></pre></div>
+<p>after I saw more, I saw the strangeness in this alpha product. <code>(cloud shell)</code><br>
+I report this, it was not accepted even though there was some discussion.<br>
+I will tell <code>screenshit,</code> my discussion with Google.</p>
+
+<h2 id=":0">Discussion conversation:</h2>
+
+<p><code>ya...@google.com</code><br>Hey, could you provide more details about how to reproduce this? For instance,<br>what is the postgres setup, and which users have what permissions?<br>Could you give a more detailed list of instructions (preferably starting from a base Cloud Shell/new project)? Thanks for your help! :)</p>
+</div></div>
+<p><code>ME</code><br>Hi,<br> This Postgres user is intended only for workers who manage the PostgreSQL<br>database<br>
+<code>postgres:x:101:105:PostgreSQL administrator,,,:/var/lib/postgresql:/bin/bash</code><br>
+<code>$ id</code><br><code>
+uid=101(postgres) gid=105(postgres) groups=105(postgres),101(ssl-cert)</code><br>
+when workers get access, to the project cloudshell
+via username postgres / other users<br> who do not have 'sudo su' access on
+cloudshell
+workers can get access_token<br>that belongs to the main user
+(The Primary Owners is RootUser)  via simple command, like above or like :
+<code><font size="3" color="yellow">curl 127.0.0.1/0.1/meta-data/service-accounts/default/token</font></code></p>
+</div></div>
+<p><code>mo...@google.com</code><br><code>Status: Won't Fix (Intended Behavior)<br>Cloud shell</code> is not intended to be used by multiple users.<br> Unless we have any public documentation that mentions a guarantee to separate cloud shell users from each other,<br> privilege escalation inside cloud shell wouldn't be a vulnerability.</p>
+</div></div>
+<p><code>ME</code><br>Hey,<br>
+how can you be like that? while in the system username: <code>postgres</code>
+<br>cannot use <code>"sudo su"</code> and there is the text:
+We trust you have received the usual lecture from the local System
+Administrator.<br>It usually boils down to these three things:<br>
+<code>#1) Respect the privacy of others.<br>
+    #2) Think before you type.<br>
+    #3) With great power comes great responsibility.</code><br>
+    means that this cloudshell is allowed for more than <code>1 user</code> by use <code>postgres</code>
+by you guys.<br>
+because there is writing like that.
+this concerns the privacy and comfort of users :)<br>
+feelings at Google or wherever improve from privilege,<br> in brandaccounts
+communication accounts manager to manager / owner
+that's a vulnerability,<br> then how come in the cloudshell there is already a
+warning?<br> and get through this, you guys looking for an excuse?
+this is not vulnerability,<br> because is blahblah.
+
+meaning you only need to make public documentation back<br> for the <code>cloud shell.</code>
+and fix this. (lol)</p>
+</div></div>         
+<p><code>mo...@google.com</code><br>Hey,<br>
+
+It is a standard warning that comes with the sudo binary, not provided by cloud shell: <br><a href="https://superuser.com/questions/500119/keeping-the-fancy-sudo-warning-forever" </a>https://superuser.com/questions/500119/keeping-the-fancy-sudo-warning-forever</br></a>
+
+<code>Sorry to disappoint you, but thanks for reporting it so that we could check.</code></p>
+</div></div>
+<p><code>ME</code><br>Hey friends,<br>It turns out that the username: <code>postgres</code><br> this is made as in
+this page:
+<a href="https://cloud.google.com/sql/docs/postgres/quickstart" </a>https://cloud.google.com/sql/docs/postgres/quickstart</a><br>
+
+you are right, <code>postgres</code> is not user intended in the cloudshell but in the<br>
+<code>SQL INSTANCES PAGE CLOUD</code>
+it turns out,<br> users who have access to this postgresql (SQL INSTANCES PAGE
+CLOUD) password can access the <code>$root cloudshell.</code><br>
+
+So the problem here, normal users <code>"postgres"</code> who are not allowed to
+<code>cloudshell,</code>  like as your comment above. (to cloudshell),<br>can jump over to
+the cloudshell and can see the main user's access_token.
+
+Best,</p>
+</div></div>
+<p><code>mo...@google.com</code><br>Just, to reiterate, is your concern that a cloud console user that does have access to the postgres linux user's password, but not to cloudshell,<br> can SSH into cloud shell, and escalate their access to full cloud shell access?
+
+If that is the case,<br> can you please provide reproduction steps? E.g. how to set up the different user accounts with that permission,<br> and what exactly the victim and attacker does. Thanks!</p>
+</div></div>
+<p><code>ME</code><br>Hey,<br>
+so I have a very big concern here: <code>PostgreSQL default</code><br>
+when the user creates Cloud SQL for the new PostgreSQL
+he certainly,<br> immediately gives access to the worker!
+the user provides the default PostgreSQL User password<br><code> (this is the new
+cloudshell <code>username: postgres</code> / Postgresql 9.6 administrator) </code><br>to the worker.
+and the worker has the authority as a manager of Postgresql to create an
+psql client that does not have a login attribute.<br>
+
+of course, the main user / in the cloud help page.
+only notified, the command in cloudshell:<br>
+<code>gcloud sql connect myinstance --user=postgres</code><br>
+
+so for the steps,<br>
+1. The main role is playing the user, creating <code>Cloud SQL</code> for the new
+<code>PostgreSQL</code><br>
+
+2. the user it gives the worker the <code>default PostgreSQL instance</code>user
+password.<br>
+if in the screenshot of this screenshot:<br><a href="
+https://drive.google.com/file/d/1epWYItsheWsRxG2cYVAUDygAiIyLc0pw/view" </a>https://drive.google.com/file/d/1epWYItsheWsRxG2cYVAUDygAiIyLc0pw/view</a><br>
+there is written in the user password:
+<code>Set a password for the 'postgres' user.<br> A password is required for the user
+to login.</code>
+<br>
+3. main user execute this command,for use cloudshell to ssh.<br>
+<code>sudo nano /etc/ssh/sshd_config<br>
+change PasswordAuthentication no to PasswordAuthentication yes<br>
+sudo service ssh restart<br></code>
+and for check IP cloudshell example: <code>dig TXT +short o-o.myaddr.l.google.com
+@ns1.google.com</code><br>
+
+4. workers can log in, to the main user cloudshell using<br>
+<code>ssh postgres@IP -p6000</code><br>
+password: default password (given to worker manager/owner Postgresql)<br>
+
+5. it means that this behavior opposes what you say, above.<br>
+which closes this report, <code>Won't Fix (Intended behavior)</code>
+and after that,<br> the worker can see the main user's <code>access_token.</code>
+<br>
+Best,</p>
+</div></div>
+<p><code>mo...@google.com</code><br>Can you make a video of the whole process, starting from a fresh <code>Cloud project?</code><br> It seems to me that 4 wouldn't work in practice.<br> Users' cloud shells are separated from each other.</p>
+</div></div>
+<p><code>ME</code><br>Hey,<br>
+I managed to make this video, and it seems like the attacker gets an IP<br>
+just asking the main user. (4 if you don't have a ip cloud shell.)<br>
+and easily users will definitely give this IP, because Google's IP is very
+safe! it can't be hacked easily.<br><a href="
+https://drive.google.com/file/d/1INgWFtctsodcj6mka58jQffymw7Mk_vH/view"</a>https://drive.google.com/file/d/1INgWFtctsodcj6mka58jQffymw7Mk_vH/view</a><br>
+
+Thanks,</p>
+</div></div>
+<p><code>mo...@google.com</code><br><code>Changed Status: Won't Fix (Intended Behavior) > Won't Fix (Infeasible) & P2 > P4</code><br>
+Hi,<br>
+
+Based on your video the SSH settings are safe by default and the victim would need to share the IP with the attacker.<br> It would take a lot of <code>low probability</code> actions from the victim to be vulnerable for this, and<br> it is against cloud shell's intended use case to run an <code>SQL server</code> in the first place.<br> We think the issue might not be severe enough for us to track it as a security bug.<br>
+
+That said - if you think we misunderstood your report, and you see a well defined security risk, please let us know what we missed.</p>
+</div></div>
+<p><code>ME</code><br>Hey,<br>
+I think there is a misunderstanding here.
+You misjudged what I meant by IP sharing is <br>when the main user uses curl or
+etc to request to the malicious site! <br>sorry for the misunderstanding here.<br>
+of course the <code>cloudshell IP</code> looks so obvious, without realizing it victim
+will lose access to privacy.<br>
+and this IP Public problem problem you guys have written, on<br>
+<a href="https://sites.google.com/site/bughunteruniversity/nonvuln/ip-port-scanning-via-google-services"
+</a>https://sites.google.com/site/bughunteruniversity/nonvuln/ip-port-scanning-via-google-services</a><br><code>"If the accessed IP addresses are public,<br> we don't consider this to be a
+vulnerability in itself.<br> In fact, oftentimes it's a legitimate product
+feature."</code><br>
+
+how could the victim share public IP (open the site) be a reason in
+opposing this case?<br> even in public IP cloudshell can be open on port <code>443</code><br>
+required first user authentication. it's very safe.<br>
+Let's see:<br>
+1. The main user opens an malicious site (belongs to the workers) such as:
+<code><font size="5" color="yellow"> curl https://blahblah</code></font><br>
+2. This public IP has been leaked, to the (log) attacker site<br>
+<a href="https://drive.google.com/file/d/1ys0cF8P_tJumEYfP7EvuVnS6a8V4xHBR/view" </a> https://drive.google.com/file/d/1ys0cF8P_tJumEYfP7EvuVnS6a8V4xHBR/view</a><br>
+3. the attacker can attack(insulting privacy issues.) the main user
+cloudshell perfectly.<br>
+and RCE! because he's have holds control of the main user <code>cloudshell.</code><br>
+
+Best,</p>
+</div></div>
+<p><code>mo...@google.com</code><br>Hey,<br>
+
+Thanks for pointing that out. Actually the IP sharing part is not that important,<br> the reasoning is valid even without it:<br> It would take a lot of low probability actions from the victim to be vulnerable for this, <br>and it is against <code>cloud shell's</code> intended use case to run an <code>SQL server</code> in the first place.</p>
+</div></div>
+<p><code>ME</code><br>Hey,<br>
+
+of course, the first place (the project) is the same IP as the IP
+<code>cloudshell.</code><br>
+<a href="https://drive.google.com/file/d/12Zce7C2in68Ti7gGmuO9HlGj9reaq6op/view"</a>https://drive.google.com/file/d/12Zce7C2in68Ti7gGmuO9HlGj9reaq6op/view</a><br>
+<code>so is this playing? well played.<br>
+every attacker is definitely bad & doing bad!</code><br>
+it is certain that of this attack will be contradictory on guidelines,<br> no
+matter if you enter in the first place though.<br>
+This is very clear, contrary to the official support page you provide to
+users.<br>
+then in this case <code>access_token</code> <br>the main user's property is <code>leaked.</code><br>
+
+<code>You just go round and round from the start.</code><br>
+low in terms of the probability of what, <br>if in the discussion it must be
+clearly not allowed to be ambiguous as your comments.<br>
+<code>blahblah IP, blahblah 4, blahblah zigzag.</code><br>
+I think you save this answer, for later if there is a public disclosure.<br>
+<code>all you have to do is answer it blahblahblah-lol.<br>
+it's because of this, because of that.</code><br>
+
+so my judgment is correct & I judge you let other users, <br>login the
+cloudshell huh?<br> which should not be allowed to enter. <code>( like comment #7 )</code><br> I
+have sent out <code>very possible</code> details from a worker (manager) to login the
+<code>cloudshell</code><br> that should not be allowed in, then you let attacker see this
+<code>cloudshell.</code><br>
+
+according to observations, surely you think the victim will become a weak
+probability<br> if he executes sharing IP repeatedly? <code>(like curl http:// etc)</code><br>
+because when the <code>cloudshell</code> has <code>restarted</code> it changes IP and all sessions
+are <code>interrupted.</code><br>
+how on this one occasion has been resolved,<br> <code>the attacker has got what he
+wants in the cloudshell project. :)</code><br>
+
+Thanks,</p>
+</div></div></br>
+
+<center><h2><code>original report from issuetracker_id: <a href="https://issuetracker.google.com/issues/142177635"</a>142177635</a></code></h2></center>
+
+        <div class="jandapage-footer">
+          <ul class="jandapage-languages">
+              <li><a huh-tags="x" href="https://twitter.com/search?q=%23bugbounty">#bugbounty</a></li>
+
+              <li><a huh-tags="xx" href="https://twitter.com/search?q=%23bugbountytips">#bugbountytips</a></li>
+
+              <li><a huh-tags="xxx" href="https://twitter.com/search?q=%23discussion-bugbounty">#discussion-bugbounty</a></li>
+
+          </ul>
+          </ul>
+        </div>
+      </div>
+    </div>
+  
+
+</body></html>
